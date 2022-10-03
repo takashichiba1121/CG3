@@ -9,6 +9,8 @@ GameScene::GameScene()
 
 GameScene::~GameScene()
 {
+	delete sprite1;
+	delete sprite2;
 	delete spriteBG;
 	delete object3d;
 }
@@ -35,6 +37,13 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	// 3Dオブジェクト生成
 	object3d = Object3d::Create();
 	object3d->Update();
+
+	//テクスチャ２番に読み込み
+	Sprite::LoadTexture(2, L"Resources/texture.png");
+	//座標{0,0}にテクスチャ2番にスプライトを生成
+	sprite1 = Sprite::Create(1, { 0,0 });
+	//座標{500,500}に、テクスチャ2番のスプライトを生成
+	sprite2 = Sprite::Create(2, { 500,500 }, { 1,0,0,1 }, { 0,0 },false,true);
 }
 
 void GameScene::Update()
@@ -65,6 +74,16 @@ void GameScene::Update()
 	}
 
 	object3d->Update();
+
+	//スペースキーを押していたら
+	if (input->PushKey(DIK_SPACE)) {
+		//現在の座標を取得
+		XMFLOAT2 position = sprite1->GetPosition();
+		//移動後の座標を計算
+		position.x += 1.0f;
+		//座標の変更を反映
+		sprite1->SetPosition(position);
+	}
 }
 
 void GameScene::Draw()
@@ -109,6 +128,8 @@ void GameScene::Draw()
 
 	/// <summary>
 	/// ここに前景スプライトの描画処理を追加できる
+	sprite1->Draw();
+	sprite2->Draw();
 	/// </summary>
 
 	// デバッグテキストの描画
