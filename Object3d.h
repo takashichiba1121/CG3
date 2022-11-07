@@ -21,18 +21,24 @@ private: // エイリアス
 	using XMMATRIX = DirectX::XMMATRIX;
 
 public: // サブクラス
+	//// 頂点データ構造体
+	//struct VertexPosNormalUv
+	//{
+	//	XMFLOAT3 pos; // xyz座標
+	//	XMFLOAT3 normal; // 法線ベクトル
+	//	XMFLOAT2 uv;  // uv座標
+	//};
+
 	// 頂点データ構造体
-	struct VertexPosNormalUv
+	struct VertexPos
 	{
 		XMFLOAT3 pos; // xyz座標
-		XMFLOAT3 normal; // 法線ベクトル
-		XMFLOAT2 uv;  // uv座標
 	};
 
 	// 定数バッファ用データ構造体
 	struct ConstBufferData
 	{
-		XMFLOAT4 color;	// 色 (RGBA)
+		//XMFLOAT4 color;	// 色 (RGBA)
 		XMMATRIX mat;	// ３Ｄ変換行列
 	};
 
@@ -146,7 +152,8 @@ private: // 静的メンバ変数
 	// インデックスバッファビュー
 	//static D3D12_INDEX_BUFFER_VIEW ibView;
 	// 頂点データ配列
-	static VertexPosNormalUv vertices[vertexCount];
+	/*static VertexPosNormalUv vertices[vertexCount];*/
+	static VertexPos vertices[vertexCount];
 	// 頂点インデックス配列
 	//static unsigned short indices[indexCount];
 	//ビルボード行列
