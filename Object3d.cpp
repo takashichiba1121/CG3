@@ -561,16 +561,16 @@ void Object3d::CreateModel()
 	////メンバ変数にコピー
 	//std::copy(std::begin(verticesSquare), std::end(verticesSquare), vertices);
 
-	VertexPos verticesPoint[] = {
-		{{-50.0f,0.0f,0.0f}},
-	};
+	//VertexPos verticesPoint[] = {
+	//	{{-10.0f,0.0f,0.0f}},
+	//};
 
-	//メンバ変数にコピー
-	std::copy(std::begin(verticesPoint), std::end(verticesPoint), vertices);
+	////メンバ変数にコピー
+	//std::copy(std::begin(verticesPoint), std::end(verticesPoint), vertices);
 
-	/*vertices[0] = { {0.0f,0.0f,0.0f},{0,0,1},{0,1} };
+	vertices[0] = { {0.0f,0.0f,0.0f} };
 
-	vertices[1] = { {10.0f,0.0f,0.0f},{0,0,1},{0,1} };*/
+	vertices[1] = { {10.0f,0.0f,0.0f}};
 
 	////四角形のインデックスデータ
 	//unsigned short indicesSquare[] = {
