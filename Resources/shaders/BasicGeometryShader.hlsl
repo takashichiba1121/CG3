@@ -1,7 +1,7 @@
 #include "BasicShaderHeader.hlsli"
 
-//四角形の頂点数
-static const uint vnum = 4;
+[//四角形の頂点数
+	static const uint vnum = 4;
 
 //センターからのオフセット
 static const float4 offset_array[vnum] =
@@ -50,7 +50,7 @@ void main(
 	//}
 
 	GSOutput element;
-	for (uint i=0;i<vnum;i++)
+	for (uint i = 0; i < vnum; i++)
 	{
 		element.svpos = input[0].pos + offset_array[i];
 		element.svpos = mul(mat, element.svpos);

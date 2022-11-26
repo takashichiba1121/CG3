@@ -551,12 +551,15 @@ void Object3d::CreateModel()
 
 	////四角形の頂点データ
 
-	//VertexPosNormalUv verticesSquare[] = {
-	//	{{-5.0f,-5.0f,0.0f},{0,0,1},{0,1}},
-	//	{{-5.0f,+5.0f,0.0f},{0,0,1},{0,0}},
-	//	{{+5.0f,-5.0f,0.0f},{0,0,1},{1,1}},
-	//	{{+5.0f,+5.0f,0.0f},{0,0,1},{1,0}},
-	//};
+	VertexPosNormalUv verticesSquare[] = {
+		{{-5.0f,-5.0f,0.0f},{0,0,1},{0,1}},
+		{{-5.0f,+5.0f,0.0f},{0,0,1},{0,0}},
+		{{+5.0f,-5.0f,0.0f},{0,0,1},{1,1}},
+		{{+5.0f,+5.0f,0.0f},{0,0,1},{1,0}},
+	};
+
+	//メンバ変数にコピー
+	std::copy(std::begin(verticesSquare), std::end(verticesSquare), vertices);
 
 	////メンバ変数にコピー
 	//std::copy(std::begin(verticesSquare), std::end(verticesSquare), vertices);
@@ -570,7 +573,7 @@ void Object3d::CreateModel()
 
 	vertices[0] = { {0.0f,0.0f,0.0f} };
 
-	vertices[1] = { {10.0f,0.0f,0.0f}};
+	vertices[1] = { {10.0f,0.0f,0.0f} };
 
 	////四角形のインデックスデータ
 	//unsigned short indicesSquare[] = {
@@ -602,10 +605,10 @@ void Object3d::CreateModel()
 		vertBuff->Unmap(0, nullptr);
 	}
 
-	// 頂点バッファビューの作成
-	vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
-	vbView.SizeInBytes = sizeof(vertices);
-	vbView.StrideInBytes = sizeof(vertices[0]);
+	//// 頂点バッファビューの作成
+	//vbView.BufferLocation = vertBuff->GetGPUVirtualAddress();
+	//vbView.SizeInBytes = sizeof(vertices);
+	//vbView.StrideInBytes = sizeof(vertices[0]);
 
 	//UINT sizeIB = static_cast<UINT>(sizeof(indices));
 	//// リソース設定
