@@ -130,7 +130,7 @@ private: // 静的メンバ変数
 	// 頂点バッファ
 	static ComPtr<ID3D12Resource> vertBuff;
 	//// インデックスバッファ
-		//static ComPtr<ID3D12Resource> indexBuff;
+	//static ComPtr<ID3D12Resource> indexBuff;
 	// テクスチャバッファ
 	static ComPtr<ID3D12Resource> texbuff;
 	// シェーダリソースビューのハンドル(CPU)

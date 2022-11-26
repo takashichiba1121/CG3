@@ -1,7 +1,6 @@
 #include "BasicShaderHeader.hlsli"
 
-[//四角形の頂点数
-	static const uint vnum = 4;
+static const int vnum = 4;
 
 //センターからのオフセット
 static const float4 offset_array[vnum] =
