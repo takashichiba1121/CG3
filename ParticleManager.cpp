@@ -289,6 +289,16 @@ void ParticleManager::InitializeGraphicsPipeline()
 		//	D3D12_APPEND_ALIGNED_ELEMENT,
 		//	D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0
 		//},
+		{
+			"TEXCOORD",0,DXGI_FORMAT_R32_FLOAT,0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0
+		},
+		{
+			"COLOR",0,DXGI_FORMAT_R32G32B32A32_FLOAT,0,
+			D3D12_APPEND_ALIGNED_ELEMENT,
+			D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA,0
+		},
 	};
 
 	// グラフィックスパイプラインの流れを設定
@@ -808,6 +818,21 @@ void ParticleManager::Update()
 		it->velocity = it->velocity + it->accel;
 		//速度による移動
 		it->position = it->position + it->velocity;
+
+		float f = (float)it->frame / it->num_frame;
+		//スケールの線形補間
+		it->scale = (it->e_scale - it->s_scale) * f;
+		it->scale += it->s_scale;
+
+		//赤の線形補間
+		it->color.x = (it->e_color.x - it->s_color.x) * f;
+		it->color.x += it->s_color.x;
+		//青の線形補間
+		it->color.y = (it->e_color.y - it->s_color.y) * f;
+		it->color.y += it->s_color.y;
+		//緑の線形補間
+		it->color.z = (it->e_color.z - it->s_color.z) * f;
+		it->color.z += it->s_color.z;
 	}
 	//頂点バッファへデータ転送
 	VertexPos* vertMap = nullptr;
@@ -819,6 +844,8 @@ void ParticleManager::Update()
 		{
 			//座標
 			vertMap->pos = it->position;
+			vertMap->scale = it->scale;
+			vertMap->color = it->color;
 			//次の頂点へ
 			vertMap++;
 		}
@@ -858,7 +885,7 @@ void ParticleManager::Draw()
 	cmdList->DrawInstanced((UINT)std::distance(Particles.begin(), Particles.end()), 1, 0, 0);
 }
 
-void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel)
+void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOAT3 accel, float start_scale, float end_scale, XMFLOAT4 start_color, XMFLOAT4 end_color)
 {
 	//リストに要素を追加
 	Particles.emplace_front();
@@ -869,5 +896,9 @@ void ParticleManager::Add(int life, XMFLOAT3 position, XMFLOAT3 velocity, XMFLOA
 	p.velocity = velocity;
 	p.accel = accel;
 	p.num_frame = life;
+	p.s_scale = start_scale;
+	p.e_scale = end_scale;
+	p.s_color = start_color;
+	p.e_color = end_color;
 }
 

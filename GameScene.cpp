@@ -44,25 +44,7 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	sprite1 = Sprite::Create(1, { 0,0 });
 	//座標{500,500}に、テクスチャ2番のスプライトを生成
 	sprite2 = Sprite::Create(2, { 500,500 }, { 1,0,0,1 }, { 0,0 }, false, true);
-}
 
-void GameScene::Update()
-{
-	//// オブジェクト移動
-	//if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
-	//{
-	//	// 現在の座標を取得
-	//	XMFLOAT3 position = ParticleMan->GetPosition();
-
-	//	// 移動後の座標を計算
-	//	if (input->PushKey(DIK_UP)) { position.y += 1.0f; }
-	//	else if (input->PushKey(DIK_DOWN)) { position.y -= 1.0f; }
-	//	if (input->PushKey(DIK_RIGHT)) { position.x += 1.0f; }
-	//	else if (input->PushKey(DIK_LEFT)) { position.x -= 1.0f; }
-
-	//	// 座標の変更を反映
-	//	ParticleMan->SetPosition(position);
-	//}
 	for (int i = 0; i < 100; i++)
 	{
 		//X,Y,Z全て[-5.0,+5.0f]でランダムに分布
@@ -82,8 +64,27 @@ void GameScene::Update()
 		const float rnd_acc = 0.001f;
 		acc.y = -(float)rand() / RAND_MAX * rnd_acc;
 		//追加
-		ParticleMan->Add(60,pos,vel,acc);
+		ParticleMan->Add(60, pos, vel, acc, 1.0f, 0.0f,{1,0,0,1},{1,1,1,1});
 	}
+}
+
+void GameScene::Update()
+{
+	//// オブジェクト移動
+	//if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
+	//{
+	//	// 現在の座標を取得
+	//	XMFLOAT3 position = ParticleMan->GetPosition();
+
+	//	// 移動後の座標を計算
+	//	if (input->PushKey(DIK_UP)) { position.y += 1.0f; }
+	//	else if (input->PushKey(DIK_DOWN)) { position.y -= 1.0f; }
+	//	if (input->PushKey(DIK_RIGHT)) { position.x += 1.0f; }
+	//	else if (input->PushKey(DIK_LEFT)) { position.x -= 1.0f; }
+
+	//	// 座標の変更を反映
+	//	ParticleMan->SetPosition(position);
+	//}
 
 	// カメラ移動
 	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A))

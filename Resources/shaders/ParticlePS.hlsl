@@ -9,6 +9,6 @@ float4 main(GSOutput input) : SV_TARGET
 	//float diffuse = saturate(dot(-light, input.normal));
 	//float brightness = diffuse + 0.3f;
 	//float4 texcolor = tex.Sample(smp, input.uv) * color;
-	return tex.Sample(smp,input.uv);
+	return tex.Sample(smp,input.uv)*input.color;
 //return float4(1, 1, 1, 1);
 }

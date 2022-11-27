@@ -47,15 +47,18 @@ void main(
 	//	element.uv = input[i].uv * 5.0f;
 	//	output.Append(element);
 	//}
-
+	float4 offset;
 	GSOutput element;
 	for (uint i = 0; i < vnum; i++)
 	{
-		float4 offset = mul(matBillboard, offset_array[i]);
+		//offset = mul(matBillboard, offset_array[i]);
+		offset = offset_array[i] * input[0].scale;
+		offset = mul(matBillboard, offset);
 		element.svpos = input[0].pos + offset;
 		//element.svpos = input[0].pos + offset_array[i];
 		element.svpos = mul(mat, element.svpos);
 		element.uv = uv_array[i];
+		element.color = input[0].color;
 		output.Append(element);
 	}
 }
