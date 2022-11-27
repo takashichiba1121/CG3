@@ -265,4 +265,3 @@ private: // メンバ変数
 	//パーティクル配列
 	std::forward_list<Particle>Particles;
 };
-
