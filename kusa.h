@@ -9,7 +9,7 @@
 /// <summary>
 /// 3Dオブジェクト
 /// </summary>
-class Object3d
+class Kusa
 {
 private: // エイリアス
 	// Microsoft::WRL::を省略
@@ -70,7 +70,7 @@ public: // 静的メンバ関数
 	/// 3Dオブジェクト生成
 	/// </summary>
 	/// <returns></returns>
-	static Object3d* Create();
+	static Kusa* Create();
 
 	/// <summary>
 	/// 視点座標の取得
@@ -193,7 +193,7 @@ public: // メンバ関数
 	/// <summary>
 	/// 毎フレーム処理
 	/// </summary>
-	void Update(int bill);
+	void Update();
 
 	/// <summary>
 	/// 描画
@@ -225,6 +225,6 @@ private: // メンバ変数
 	// ローカルワールド変換行列
 	XMMATRIX matWorld;
 	// 親オブジェクト
-	Object3d* parent = nullptr;
+	Kusa* parent = nullptr;
 };
 

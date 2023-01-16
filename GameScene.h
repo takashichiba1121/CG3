@@ -6,6 +6,8 @@
 #include "Sprite.h"
 #include "ParticleManager.h"
 #include "DebugText.h"
+#include"Object3d.h"
+#include"kusa.h"
 
 /// <summary>
 /// ゲームシーン
@@ -54,13 +56,17 @@ public: // メンバ関数
 private: // メンバ変数
 	DirectXCommon* dxCommon = nullptr;
 	Input* input = nullptr;
-	DebugText debugText;	
+	DebugText debugText;
 
 	/// <summary>
 	/// ゲームシーン用
 	/// </summary>
 	Sprite* spriteBG = nullptr;
 	ParticleManager* ParticleMan = nullptr;
+
+	Object3d* object3d = nullptr;
+	Object3d* object3d2 = nullptr;
+	Kusa* kusa[20];
 
 	Sprite* sprite1 = nullptr;
 	Sprite* sprite2 = nullptr;

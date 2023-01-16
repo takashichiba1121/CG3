@@ -1,4 +1,4 @@
-﻿#include "Object3d.h"
+﻿#include "kusa.h"
 #include <d3dcompiler.h>
 #include <DirectXTex.h>
 
@@ -10,37 +10,37 @@ using namespace Microsoft::WRL;
 /// <summary>
 /// 静的メンバ変数の実体
 /// </summary>
-const float Object3d::radius = 5.0f;				// 底面の半径
-const float Object3d::prizmHeight = 8.0f;			// 柱の高さ
-ID3D12Device* Object3d::device = nullptr;
-UINT Object3d::descriptorHandleIncrementSize = 0;
-ID3D12GraphicsCommandList* Object3d::cmdList = nullptr;
-ComPtr<ID3D12RootSignature> Object3d::rootsignature;
-ComPtr<ID3D12PipelineState> Object3d::pipelinestate;
-ComPtr<ID3D12DescriptorHeap> Object3d::descHeap;
-ComPtr<ID3D12Resource> Object3d::vertBuff;
-ComPtr<ID3D12Resource> Object3d::indexBuff;
-ComPtr<ID3D12Resource> Object3d::texbuff;
-CD3DX12_CPU_DESCRIPTOR_HANDLE Object3d::cpuDescHandleSRV;
-CD3DX12_GPU_DESCRIPTOR_HANDLE Object3d::gpuDescHandleSRV;
-XMMATRIX Object3d::matView{};
-XMMATRIX Object3d::matProjection{};
-XMFLOAT3 Object3d::eye = { 0, 0, -50.0f };
-XMFLOAT3 Object3d::target = { 0, 0, 0 };
-XMFLOAT3 Object3d::up = { 0, 1, 0 };
-D3D12_VERTEX_BUFFER_VIEW Object3d::vbView{};
-D3D12_INDEX_BUFFER_VIEW Object3d::ibView{};
-Object3d::VertexPosNormalUv Object3d::vertices[vertexCount];
-unsigned short Object3d::indices[indexCount];
-XMMATRIX Object3d::matBillboard=XMMatrixIdentity();
-XMMATRIX Object3d::matBillboardY= XMMatrixIdentity();
+const float Kusa::radius = 5.0f;				// 底面の半径
+const float Kusa::prizmHeight = 8.0f;			// 柱の高さ
+ID3D12Device* Kusa::device = nullptr;
+UINT Kusa::descriptorHandleIncrementSize = 0;
+ID3D12GraphicsCommandList* Kusa::cmdList = nullptr;
+ComPtr<ID3D12RootSignature>Kusa::rootsignature;
+ComPtr<ID3D12PipelineState> Kusa::pipelinestate;
+ComPtr<ID3D12DescriptorHeap> Kusa::descHeap;
+ComPtr<ID3D12Resource> Kusa::vertBuff;
+ComPtr<ID3D12Resource> Kusa::indexBuff;
+ComPtr<ID3D12Resource> Kusa::texbuff;
+CD3DX12_CPU_DESCRIPTOR_HANDLE Kusa::cpuDescHandleSRV;
+CD3DX12_GPU_DESCRIPTOR_HANDLE Kusa::gpuDescHandleSRV;
+XMMATRIX Kusa::matView{};
+XMMATRIX Kusa::matProjection{};
+XMFLOAT3 Kusa::eye = { 0, 0, -50.0f };
+XMFLOAT3 Kusa::target = { 0, 0, 0 };
+XMFLOAT3 Kusa::up = { 0, 1, 0 };
+D3D12_VERTEX_BUFFER_VIEW Kusa::vbView{};
+D3D12_INDEX_BUFFER_VIEW Kusa::ibView{};
+Kusa::VertexPosNormalUv Kusa::vertices[vertexCount];
+unsigned short Kusa::indices[indexCount];
+XMMATRIX Kusa::matBillboard=XMMatrixIdentity();
+XMMATRIX Kusa::matBillboardY= XMMatrixIdentity();
 
-void Object3d::StaticInitialize(ID3D12Device* device, int window_width, int window_height)
+void Kusa::StaticInitialize(ID3D12Device* device, int window_width, int window_height)
 {
 	// nullptrチェック
 	assert(device);
 
-	Object3d::device = device;
+	Kusa::device = device;
 
 	// デスクリプタヒープの初期化
 	InitializeDescriptorHeap();
@@ -59,13 +59,13 @@ void Object3d::StaticInitialize(ID3D12Device* device, int window_width, int wind
 
 }
 
-void Object3d::PreDraw(ID3D12GraphicsCommandList* cmdList)
+void Kusa::PreDraw(ID3D12GraphicsCommandList* cmdList)
 {
 	// PreDrawとPostDrawがペアで呼ばれていなければエラー
-	assert(Object3d::cmdList == nullptr);
+	assert(Kusa::cmdList == nullptr);
 
 	// コマンドリストをセット
-	Object3d::cmdList = cmdList;
+	Kusa::cmdList = cmdList;
 
 	// パイプラインステートの設定
 	cmdList->SetPipelineState(pipelinestate.Get());
@@ -75,45 +75,45 @@ void Object3d::PreDraw(ID3D12GraphicsCommandList* cmdList)
 	cmdList->IASetPrimitiveTopology(D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 }
 
-void Object3d::PostDraw()
+void Kusa::PostDraw()
 {
 	// コマンドリストを解除
-	Object3d::cmdList = nullptr;
+	Kusa::cmdList = nullptr;
 }
 
-Object3d* Object3d::Create()
+Kusa* Kusa::Create()
 {
 	// 3Dオブジェクトのインスタンスを生成
-	Object3d* object3d = new Object3d();
-	if (object3d == nullptr) {
+	Kusa* kusa = new Kusa();
+	if (kusa == nullptr) {
 		return nullptr;
 	}
 
 	// 初期化
-	if (!object3d->Initialize()) {
-		delete object3d;
+	if (!kusa->Initialize()) {
+		delete kusa;
 		assert(0);
 		return nullptr;
 	}
 
-	return object3d;
+	return kusa;
 }
 
-void Object3d::SetEye(XMFLOAT3 eye)
+void Kusa::SetEye(XMFLOAT3 eye)
 {
-	Object3d::eye = eye;
+	Kusa::eye = eye;
 
 	UpdateViewMatrix();
 }
 
-void Object3d::SetTarget(XMFLOAT3 target)
+void Kusa::SetTarget(XMFLOAT3 target)
 {
-	Object3d::target = target;
+	Kusa::target = target;
 
 	UpdateViewMatrix();
 }
 
-void Object3d::CameraMoveVector(XMFLOAT3 move)
+void Kusa::CameraMoveVector(XMFLOAT3 move)
 {
 	XMFLOAT3 eye_moved = GetEye();
 	XMFLOAT3 target_moved = GetTarget();
@@ -130,7 +130,7 @@ void Object3d::CameraMoveVector(XMFLOAT3 move)
 	SetTarget(target_moved);
 }
 
-void Object3d::CameraMoveEyeVector(XMFLOAT3 move)
+void Kusa::CameraMoveEyeVector(XMFLOAT3 move)
 {
 	XMFLOAT3 eye_moved = GetEye();
 
@@ -141,7 +141,7 @@ void Object3d::CameraMoveEyeVector(XMFLOAT3 move)
 	SetEye(eye_moved);
 }
 
-void Object3d::InitializeDescriptorHeap()
+void Kusa::InitializeDescriptorHeap()
 {
 	HRESULT result = S_FALSE;
 
@@ -160,7 +160,7 @@ void Object3d::InitializeDescriptorHeap()
 
 }
 
-void Object3d::InitializeCamera(int window_width, int window_height)
+void Kusa::InitializeCamera(int window_width, int window_height)
 {
 	//// ビュー行列の生成
 	//matView = XMMatrixLookAtLH(
@@ -184,7 +184,7 @@ void Object3d::InitializeCamera(int window_width, int window_height)
 	);
 }
 
-void Object3d::InitializeGraphicsPipeline()
+void Kusa::InitializeGraphicsPipeline()
 {
 	HRESULT result = S_FALSE;
 	ComPtr<ID3DBlob> vsBlob; // 頂点シェーダオブジェクト
@@ -330,7 +330,7 @@ void Object3d::InitializeGraphicsPipeline()
 
 }
 
-void Object3d::LoadTexture()
+void Kusa::LoadTexture()
 {
 	HRESULT result = S_FALSE;
 
@@ -338,7 +338,7 @@ void Object3d::LoadTexture()
 	ScratchImage scratchImg{};
 
 	// WICテクスチャのロード
-	result = LoadFromWICFile(L"Resources/tex1.png", WIC_FLAGS_NONE, &metadata, scratchImg);
+	result = LoadFromWICFile(L"Resources/kusa.png", WIC_FLAGS_NONE, &metadata, scratchImg);
 	assert(SUCCEEDED(result));
 
 	ScratchImage mipChain{};
@@ -402,7 +402,7 @@ void Object3d::LoadTexture()
 
 }
 
-void Object3d::CreateModel()
+void Kusa::CreateModel()
 {
 	HRESULT result = S_FALSE;
 
@@ -601,7 +601,7 @@ void Object3d::CreateModel()
 	ibView.SizeInBytes = sizeof(indices);
 }
 
-void Object3d::UpdateViewMatrix()
+void Kusa::UpdateViewMatrix()
 {
 	//// ビュー行列の更新
 	//matView = XMMatrixLookAtLH(XMLoadFloat3(&eye), XMLoadFloat3(&target), XMLoadFloat3(&up));
@@ -689,7 +689,7 @@ void Object3d::UpdateViewMatrix()
 #pragma region
 }
 
-bool Object3d::Initialize()
+bool Kusa::Initialize()
 {
 	// nullptrチェック
 	assert(device);
@@ -711,7 +711,7 @@ bool Object3d::Initialize()
 
 	return true;
 }
-void Object3d::Update(int bill)
+void Kusa::Update()
 {
 	HRESULT result;
 	XMMATRIX matScale, matRot, matTrans;
@@ -728,17 +728,7 @@ void Object3d::Update(int bill)
 	matWorld = XMMatrixIdentity(); // 変形をリセット
 	matWorld *= matScale; // ワールド行列にスケーリングを反映
 	matWorld *= matRot; // ワールド行列に回転を反映
-	switch (bill)
-	{
-	case 0:
-		break;
-	case 1:
-		matWorld *= matBillboard;
-		break;
-	case 2:
-		matWorld *= matBillboardY;
-		break;
-	}
+	matWorld *= matBillboardY;
 	matWorld *= matTrans; // ワールド行列に平行移動を反映
 
 	// 親オブジェクトがあれば
@@ -755,11 +745,11 @@ void Object3d::Update(int bill)
 	constBuff->Unmap(0, nullptr);
 }
 
-void Object3d::Draw()
+void Kusa::Draw()
 {
 	// nullptrチェック
 	assert(device);
-	assert(Object3d::cmdList);
+	assert(Kusa::cmdList);
 
 	// 頂点バッファの設定
 	cmdList->IASetVertexBuffers(0, 1, &vbView);

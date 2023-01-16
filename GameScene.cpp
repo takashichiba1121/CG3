@@ -38,6 +38,23 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	ParticleMan = ParticleManager::Create();
 	ParticleMan->Update();
 
+	object3d = Object3d::Create();
+	object3d->Update(0);
+	object3d2 = Object3d::Create();
+	object3d2->Update(1);
+	object3d2->SetPosition({30,0,0});
+	for (int i = 0; i < 20; i++)
+	{
+		kusa[i] = Kusa::Create();
+		kusa[i]->Update();
+		const float rnd_pos = 50.0f;
+		XMFLOAT3 pos;
+		pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		pos.y = -20;
+		pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+		kusa[i]->SetPosition(pos);
+	}
+
 	//テクスチャ２番に読み込み
 	Sprite::LoadTexture(2, L"Resources/texture.png");
 	//座標{0,0}にテクスチャ2番にスプライトを生成
@@ -70,21 +87,6 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 
 void GameScene::Update()
 {
-	//// オブジェクト移動
-	//if (input->PushKey(DIK_UP) || input->PushKey(DIK_DOWN) || input->PushKey(DIK_RIGHT) || input->PushKey(DIK_LEFT))
-	//{
-	//	// 現在の座標を取得
-	//	XMFLOAT3 position = ParticleMan->GetPosition();
-
-	//	// 移動後の座標を計算
-	//	if (input->PushKey(DIK_UP)) { position.y += 1.0f; }
-	//	else if (input->PushKey(DIK_DOWN)) { position.y -= 1.0f; }
-	//	if (input->PushKey(DIK_RIGHT)) { position.x += 1.0f; }
-	//	else if (input->PushKey(DIK_LEFT)) { position.x -= 1.0f; }
-
-	//	// 座標の変更を反映
-	//	ParticleMan->SetPosition(position);
-	//}
 
 	// カメラ移動
 	if (input->PushKey(DIK_W) || input->PushKey(DIK_S) || input->PushKey(DIK_D) || input->PushKey(DIK_A))
@@ -93,19 +95,48 @@ void GameScene::Update()
 		else if (input->PushKey(DIK_S)) { ParticleManager::CameraMoveEyeVector({ 0.0f,-1.0f,0.0f }); }
 		if (input->PushKey(DIK_D)) { ParticleManager::CameraMoveEyeVector({ +1.0f,0.0f,0.0f }); }
 		else if (input->PushKey(DIK_A)) { ParticleManager::CameraMoveEyeVector({ -1.0f,0.0f,0.0f }); }
+		if (input->PushKey(DIK_W)) { Object3d::CameraMoveEyeVector({ 0.0f,+1.0f,0.0f }); }
+		else if (input->PushKey(DIK_S)) { Object3d::CameraMoveEyeVector({ 0.0f,-1.0f,0.0f }); }
+		if (input->PushKey(DIK_D)) { Object3d::CameraMoveEyeVector({ +1.0f,0.0f,0.0f }); }
+		else if (input->PushKey(DIK_A)) { Object3d::CameraMoveEyeVector({ -1.0f,0.0f,0.0f }); }
+		if (input->PushKey(DIK_W)) { Kusa::CameraMoveEyeVector({ 0.0f,+1.0f,0.0f }); }
+		else if (input->PushKey(DIK_S)) { Kusa::CameraMoveEyeVector({ 0.0f,-1.0f,0.0f }); }
+		if (input->PushKey(DIK_D)) { Kusa::CameraMoveEyeVector({ +1.0f,0.0f,0.0f }); }
+		else if (input->PushKey(DIK_A)) { Kusa::CameraMoveEyeVector({ -1.0f,0.0f,0.0f }); }
 	}
 
-	ParticleMan->Update();
+	object3d->Update(0);
+	object3d2->Update(1);
+	for (int i = 0; i < 20; i++)
+	{
+		kusa[i]->Update();
+	}
 
 	//スペースキーを押していたら
 	if (input->PushKey(DIK_SPACE)) {
-		//現在の座標を取得
-		XMFLOAT2 position = sprite1->GetPosition();
-		//移動後の座標を計算
-		position.x += 1.0f;
-		//座標の変更を反映
-		sprite1->SetPosition(position);
+		for (int i = 0; i < 10; i++)
+		{
+			//X,Y,Z全て[-5.0,+5.0f]でランダムに分布
+			const float rnd_pos = 10.0f;
+			XMFLOAT3 pos{};
+			pos.x = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+			pos.y = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+			pos.z = (float)rand() / RAND_MAX * rnd_pos - rnd_pos / 2.0f;
+			//X,Y,Z全て[-5.0,+5.0f]でランダムに分布
+			const float rnd_vel = 0.1f;
+			XMFLOAT3 vel{};
+			vel.x = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.y = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			vel.z = (float)rand() / RAND_MAX * rnd_vel - rnd_vel / 2.0f;
+			//重力に見立てててYのみ[-0.001f,0]でランダムに分布
+			XMFLOAT3 acc{};
+			const float rnd_acc = 0.001f;
+			acc.y = -(float)rand() / RAND_MAX * rnd_acc;
+			//追加
+			ParticleMan->Add(60, pos, vel, acc, 1.0f, 0.0f, { 1,0,0,1 }, { 1,1,1,1 });
+		}
 	}
+	ParticleMan->Update();
 }
 
 void GameScene::Draw()
@@ -142,6 +173,30 @@ void GameScene::Draw()
 
 	// 3Dオブジェクト描画後処理
 	ParticleManager::PostDraw();
+
+	// 3Dオブジェクト描画前処理
+	Object3d::PreDraw(cmdList);
+
+	// 3Dオブクジェクトの描画
+	object3d->Draw();
+	object3d2->Draw();
+
+	/// <summary>
+	/// ここに3Dオブジェクトの描画処理を追加できる
+	/// </summary>
+
+	// 3Dオブジェクト描画後処理
+	Object3d::PostDraw();
+	Kusa::PreDraw(cmdList);
+	for (int i = 0; i < 20; i++)
+	{
+		kusa[i]->Draw();
+	}
+
+	/// <summary>
+	/// ここに3Dオブジェクトの描画処理を追加できる
+	/// </summary>
+	Kusa::PostDraw();
 #pragma endregion
 
 #pragma region 前景スプライト描画
