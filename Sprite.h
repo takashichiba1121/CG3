@@ -78,9 +78,6 @@ public: // 静的メンバ関数
 	/// <returns>生成されたスプライト</returns>
 	static Sprite* Create(UINT texNumber, XMFLOAT2 position, XMFLOAT4 color = { 1, 1, 1, 1 }, XMFLOAT2 anchorpoint = { 0.0f, 0.0f }, bool isFlipX = false, bool isFlipY = false);
 
-	//座標の取得
-	const XMFLOAT2& GetPosition() { return position; };
-
 private: // 静的メンバ変数
 	// テクスチャの最大枚数
 	static const int srvCount = 512;
