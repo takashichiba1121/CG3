@@ -8,6 +8,7 @@
 #include <string>
 #include "Model.h"
 #include "Camera.h"
+#include"Light.h"
 
 /// <summary>
 /// 3Dオブジェクト
@@ -37,10 +38,9 @@ public: // サブクラス
 	// 定数バッファ用データ構造体B0
 	struct ConstBufferDataB0
 	{
-		//XMMATRIX viewproj; //ビュープロジェクション行列
-		//XMMATRIX world;    //ワールド座標
-		//XMFLOAT3 cameraPos;//カメラ座標（ワールド座標）
-		XMMATRIX mat;
+		XMMATRIX viewproj;
+		XMMATRIX world;
+		XMFLOAT3 cameraPos;
 	};
 
 private: // 定数
@@ -82,6 +82,10 @@ public: // 静的メンバ関数
 	/// <returns></returns>
 	static Object3d* Create();
 
+	static void SetLight(Light* light) {
+		Object3d::light = light;
+	}
+
 private: // 静的メンバ変数
 	// デバイス
 	static ID3D12Device* device;
@@ -91,6 +95,8 @@ private: // 静的メンバ変数
 	static PipelineSet pipelineSet;
 	// カメラ
 	static Camera* sCamera_;
+
+	static Light* light;
 
 public: // メンバ関数
 	bool Initialize();
@@ -117,6 +123,8 @@ public: // メンバ関数
 	void SetPosition(XMFLOAT3 position) { this->position = position; }
 
 	void SetRotation(XMFLOAT3 rotation) { this->rotation = rotation; }
+
+	XMFLOAT3 GetRotation() { return rotation; }
 
 	/// <summary>
 	/// スケールの設定
