@@ -37,7 +37,10 @@ public: // サブクラス
 	// 定数バッファ用データ構造体B0
 	struct ConstBufferDataB0
 	{
-		XMMATRIX mat;	// ３Ｄ変換行列
+		//XMMATRIX viewproj; //ビュープロジェクション行列
+		//XMMATRIX world;    //ワールド座標
+		//XMFLOAT3 cameraPos;//カメラ座標（ワールド座標）
+		XMMATRIX mat;
 	};
 
 private: // 定数
