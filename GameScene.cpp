@@ -20,8 +20,8 @@ GameScene::~GameScene()
 	delete objSphere;
 	delete modelSkydome;
 	delete modelGround;
-	delete modelFighter;
-	delete modelSphere;
+	delete notSmoothingModel;
+	delete smoothingModel;
 	delete camera;
 	delete light;
 }
@@ -56,24 +56,17 @@ void GameScene::Initialize(DirectXCommon* dxCommon, Input* input)
 	// 背景スプライト生成
 	spriteBG = Sprite::Create(1, { 0.0f,0.0f });
 	// 3Dオブジェクト生成
-	objSkydome = Object3d::Create();
-	objGround = Object3d::Create();
 	objFighter = Object3d::Create();
 	objSphere = Object3d::Create();
 
 	// テクスチャ2番に読み込み
 	Sprite::LoadTexture(2, L"Resources/texture.png");
 
-	modelSkydome = Model::CreateFromOBJ("skydome");
-	modelGround = Model::CreateFromOBJ("ground");
-	modelFighter = Model::CreateFromOBJ("chr_sword");
-	modelSphere = Model::CreateFromOBJ("sphere", true);
-
-	objSkydome->SetModel(modelSkydome);
-	objGround->SetModel(modelGround);
-	objFighter->SetModel(modelFighter);
-	objSphere->SetModel(modelSphere);
-	objFighter->SetPosition({ +1,0,0 });
+	notSmoothingModel = Model::CreateFromOBJ("sphere", false);
+	smoothingModel = Model::CreateFromOBJ("sphere", true);
+	objFighter->SetModel(notSmoothingModel);
+	objSphere->SetModel(smoothingModel);
+	objFighter->SetPosition({ +1,1,0 });
 	objSphere->SetPosition({ -1,1,0 });
 
 	//ライト生成
@@ -126,9 +119,6 @@ void GameScene::Update()
 	light->Update();
 
 	camera->Update();
-
-	objSkydome->Update();
-	objGround->Update();
 	objFighter->Update();
 	objSphere->Update();
 
@@ -163,8 +153,6 @@ void GameScene::Draw()
 	Object3d::PreDraw(cmdList);
 
 	// 3Dオブクジェクトの描画
-	//objSkydome->Draw();
-	//objGround->Draw();
 	objFighter->Draw();
 	objSphere->Draw();
 

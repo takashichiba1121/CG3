@@ -64,8 +64,8 @@ class GameScene {
 
 	Model* modelSkydome = nullptr;
 	Model* modelGround = nullptr;
-	Model* modelFighter = nullptr;
-	Model* modelSphere = nullptr;
+	Model* notSmoothingModel = nullptr;
+	Model* smoothingModel = nullptr;
 
 	Object3d* objSkydome = nullptr;
 	Object3d* objGround = nullptr;
